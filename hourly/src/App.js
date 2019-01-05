@@ -7,6 +7,7 @@ import {withRouter} from 'react-router';
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import Login from './components/login';
+import { fetchUser, toggleLoginStatus} from '../actions';
 
 class App extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class App extends Component {
       .post('https://hourlybgf.herokuapp.com/api/login', this.state.userInfo)
       .then(res => {
         if(res.status = 200) {
-          this.props.setupEnvironment;
+          this.props.fetchUser;
           this.props.toggleLoginStatus
           this.props.history.push('/myoffers')
         }
@@ -62,5 +63,5 @@ const mapStateToProps = (state) => {
 
 export default withRouter(connect(
   mapStateToProps,
-  { }, 
+  { fetchUser, toggleLoginStatus}, 
 )(App));
