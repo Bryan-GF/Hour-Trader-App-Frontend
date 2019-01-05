@@ -7,6 +7,7 @@ import {withRouter} from 'react-router';
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import Login from './components/login';
+import MyOffers from './components/myoffers.js';
 import { fetchUser, toggleLoginStatus} from './actions';
 
 class App extends Component {
@@ -14,6 +15,7 @@ class App extends Component {
     super(props);
     this.state = {
       user: this.props.user,
+      offers: this.props.offers,
       userInfo: {
         username: '',
         password: ''
@@ -28,14 +30,20 @@ class App extends Component {
       .then(res => {
         if(res.status = 200 && res.data) {
           localStorage.setItem('user-token', res.data);
-          this.props.toggleLoginStatus;
-          this.props.fetchUser(this.state.userInfo);
+          this.props.toggleLoginStatus();
           this.props.history.push('/myoffers')
         }
       })
       .catch(err => {
         console.log(err)
       })
+  }
+
+  logoutHandler = (ev) => {
+    ev.preventDefault();
+    localStorage.removeItem('user-token')
+    this.props.toggleLoginStatus();
+    this.props.history.push('/')
   }
 
   changeHandler = (ev) => {
@@ -46,10 +54,21 @@ class App extends Component {
   }
 
   render() {
+    let events = [
+      {
+        start: '2017-01-06',
+        end: '2017-01-08',
+        rendering: 'background',
+        color: '#00FF00'
+      },
+    ]
     return (
       <div className="App">
         <Route exact path='/' render ={(props) => (
           <Login {...props} changeHandler={this.changeHandler} loginHandler={this.loginHandler}/> 
+        )}/>
+        <Route exact path='/myoffers' render = {(props) => (
+          <MyOffers {...props} logoutHandler={this.logoutHandler} events={events} />
         )}/>
       </div>
     );
@@ -58,7 +77,8 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.usersReducer.user
+    user:state.usersReducer.user,
+    offers: state.usersReducer.offers
   };
 };
 
