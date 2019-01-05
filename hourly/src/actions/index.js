@@ -10,10 +10,14 @@ export const toggleLoginStatus = () => dispatch => {
     dispatch({type: TOGGLE_LOGIN_STATUS});
 }
 
-export const fetchUser = () => dispatch => {
+export const fetchUser = (user) => dispatch => {
     dispatch({type: FETCHING_USER_INFO});
+    const token = localStorage.getItem('user-token')
+    if(token) {
+        axios.defaults.headers.common['Authorization'] = token;
+    }
     return axios
-    .get('https://hourlybgf.herokuapp.com/api/login/', )
+    .get('https://hourlybgf.herokuapp.com/api/user')
     .then(res => {
         dispatch({type: FETCHING_USER_SUCCESS, payload: res.data})
     })

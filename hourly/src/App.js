@@ -27,8 +27,9 @@ class App extends Component {
       .post('https://hourlybgf.herokuapp.com/api/user/login', this.state.userInfo)
       .then(res => {
         if(res.status = 200 && res.data) {
-          console.log('hey')
-          
+          localStorage.setItem('user-token', res.data);
+          this.props.toggleLoginStatus;
+          this.props.fetchUser(this.state.userInfo);
           this.props.history.push('/myoffers')
         }
       })
