@@ -7,7 +7,7 @@ import {withRouter} from 'react-router';
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import Login from './components/login';
-import { fetchUser, toggleLoginStatus} from '../actions';
+import { fetchUser, toggleLoginStatus} from './actions';
 
 class App extends Component {
   constructor(props) {
@@ -24,11 +24,11 @@ class App extends Component {
   loginHandler = (ev) => {
     ev.preventDefault();
     return axios
-      .post('https://hourlybgf.herokuapp.com/api/login', this.state.userInfo)
+      .post('https://hourlybgf.herokuapp.com/api/user/login', this.state.userInfo)
       .then(res => {
-        if(res.status = 200) {
-          this.props.fetchUser;
-          this.props.toggleLoginStatus
+        if(res.status = 200 && res.data) {
+          console.log('hey')
+          
           this.props.history.push('/myoffers')
         }
       })
@@ -47,7 +47,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Route path='/' render ={(props) => (
+        <Route exact path='/' render ={(props) => (
           <Login {...props} changeHandler={this.changeHandler} loginHandler={this.loginHandler}/> 
         )}/>
       </div>
